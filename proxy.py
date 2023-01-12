@@ -26,8 +26,7 @@ def process_request(request: api.CalculatorHeader, server_address: tuple[str, in
     client_time_remaining = None
     was_stale = False
     cached = False
-    # Check if the data is in the cache, if the requests cache-control is 0 we must not use the cache and request
-    # a new response
+    # Check if the data is in the cache, if the requests cache-control is 0 we must not use the cache and request a new response
     if ((data, request.show_steps) in cache) and (request.cache_control != 0):
         response = cache[(data, request.show_steps)]
         current_time = int(time.time())
@@ -42,8 +41,7 @@ def process_request(request: api.CalculatorHeader, server_address: tuple[str, in
         else:  # response is 'stale'
             was_stale = True
 
-    # Request is not in the cache or the response is 'stale' so we need to send a new request to the server and
-    # cache the response
+    # Request is not in the cache or the response is 'stale' so we need to send a new request to the server and cache the response
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         try:
             server_socket.connect(server_address)
@@ -88,7 +86,8 @@ def proxy(proxy_address: tuple[str, int], server_adress: tuple[str, int]) -> Non
 
         # Prepare the proxy socket
         # * Fill in start (1)
-        proxy_socket.bind(proxy_address)  # bind proxy IP to proxy port - proxy_address argument contains tuple of both
+        proxy_socket.bind((api.DEFAULT_PROXY_HOST,
+                           api.DEFAULT_PROXY_PORT))  # bind proxy IP to proxy port
         proxy_socket.listen(500)  # put the proxy in listen mode -> listen to maximum 500 incoming connections
         # * Fill in end (1)
 
@@ -129,7 +128,7 @@ def client_handler(client_socket: socket.socket, client_address: tuple[str, int]
         while True:
             # Receive data from the client
             # * Fill in start (3)
-            data = client_socket.recv(api.BUFFER_SIZE)  # the proxy receives the data from the client
+            data = client_socket.recv(api.BUFFER_SIZE)# the proxy receives the data from the client
             # * Fill in end (3)
 
             if not data:

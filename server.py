@@ -88,7 +88,8 @@ def server(host: str, port: int) -> None:
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         # Prepare the server socket
         # * Fill in start (1)
-        server_socket.bind((host, port))  # the server binds the IP and port so it can listen to incoming requests
+        server_socket.bind((api.DEFAULT_SERVER_HOST,
+                            api.DEFAULT_SERVER_PORT))  # the server binds the IP and port so it can listen to incoming requests
         server_socket.listen(500)  # put the server in listen mode -> listen to maximum 500 incoming connections
         # * Fill in end (1)
         threads = []
